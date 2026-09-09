@@ -21,10 +21,16 @@
   },
   "type": "module",
   "devDependencies": {
+    "@anvia/studio": "^1.1.2",
     "@types/node": "^26.5.0",
     "tsx": "^4.23.13"
   },
   "dependencies": {
-    "typescript": "^7.0.2"
+    "@anvia/core": "^1.1.2",
+    "@anvia/openai": "^1.1.2",
+    "@inquirer/prompts": "^8.7.2",
+    "dotenv": "^17.4.2",
+    "typescript": "^7.0.2",
+    "zod": "^4.5.4"
   }
 }
