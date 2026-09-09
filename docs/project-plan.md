@@ -134,7 +134,11 @@ Struktur ini target, bukan kewajiban membuat semua file di awal. Jangan membangu
 
 ## 4. Milestone pengerjaan
 
+**Legenda progres:** `[x]` selesai dan diverifikasi, `[~]` implementasi tersedia tetapi masih ada verifikasi yang tertunda, `[ ]` belum selesai.
+
 ### Milestone 1 — Fondasi project
+
+**Status:** [x] Selesai — commit `fa136e1`.
 
 **Tujuan belajar:** memahami entry point, konfigurasi, schema, dan dependency boundary.
 
@@ -153,6 +157,8 @@ Pekerjaan:
 
 ### Milestone 2 — Article Refiner mock
 
+**Status:** [x] Selesai — commit `7206231`.
+
 **Tujuan belajar:** sequential pipeline dan kontrak antar-stage.
 
 Pekerjaan:
@@ -168,6 +174,8 @@ Pekerjaan:
 **Selesai jika:** sample menghasilkan draft, critique, dan artikel final; test membuktikan rewrite menerima draft dan feedback yang benar, serta input kosong ditolak.
 
 ### Milestone 3 — Article Refiner live dan Studio
+
+**Status:** [~] Implementasi live, shared registry, dan Studio selesai — commit `0038597`. Live network smoke test dengan credential nyata belum dijalankan.
 
 **Tujuan belajar:** integrasi model, prompt per peran, dan inspeksi visual.
 
@@ -186,6 +194,8 @@ Pekerjaan:
 
 ### Milestone 4 — Idea Review Board
 
+**Status:** [x] Selesai — commit `17f937b`.
+
 **Tujuan belajar:** parallel fan-out/fan-in dan penggabungan perspektif.
 
 Pekerjaan:
@@ -202,6 +212,8 @@ Pekerjaan:
 
 ### Milestone 5 — Ticket Triage
 
+**Status:** [x] Selesai — commit `c7d356f`.
+
 **Tujuan belajar:** structured extraction, validation gate, dan routing deterministik.
 
 Pekerjaan:
@@ -217,6 +229,8 @@ Pekerjaan:
 **Selesai jika:** router hanya menerima data tervalidasi, setiap prioritas menghasilkan antrean yang ditetapkan, dan input invalid tidak diteruskan. Tidak ada pengiriman tiket eksternal.
 
 ### Milestone 6 — Finalisasi dan demo end-to-end
+
+**Status:** [ ] Belum dikerjakan.
 
 **Tujuan belajar:** reliability, pengalaman pengguna, dan evaluasi.
 
@@ -332,17 +346,17 @@ Ekspektasi: typecheck lulus, tests deterministik lulus tanpa API key, build meng
 
 ## 7. Checklist penerimaan akhir
 
-- [ ] Tiga workflow sesuai diagram, bukan tiga prompt tunggal tanpa pipeline.
-- [ ] Article Refiner mempertahankan draft dan feedback sampai rewrite.
-- [ ] Idea Review Board memiliki tiga cabang paralel dan merge yang lengkap.
-- [ ] Ticket Triage memvalidasi extraction sebelum routing deterministik.
-- [ ] Semua workflow dapat dijalankan dari CLI dan didemokan lewat Studio.
-- [ ] Mode mock jelas dibedakan dari hasil live.
+- [x] Tiga workflow sesuai diagram, bukan tiga prompt tunggal tanpa pipeline.
+- [x] Article Refiner mempertahankan draft dan feedback sampai rewrite.
+- [x] Idea Review Board memiliki tiga cabang paralel dan merge yang lengkap.
+- [x] Ticket Triage memvalidasi extraction sebelum routing deterministik.
+- [~] Semua workflow dapat dijalankan dari CLI dan sudah terdaftar di Studio; inspeksi visual graph dan demo browser lengkap masih pending.
+- [x] Mode mock jelas dibedakan dari hasil live.
 - [ ] Satu provider live terkonfigurasi dan ketiga workflow telah diuji dengan panggilan asli.
-- [ ] Error input, provider, schema, dan branch tidak menghasilkan klaim sukses palsu.
-- [ ] Test otomatis lulus tanpa kredensial atau network.
-- [ ] Sample input, setup environment, command, dan batasan terdokumentasi.
-- [ ] Secret tidak masuk Git/log, dan Studio digunakan lokal.
+- [~] Error input, schema, dan branch sudah diuji; error provider melalui panggilan live nyata belum diverifikasi.
+- [x] Test otomatis lulus tanpa kredensial atau network.
+- [~] Sample input dan command workflow sudah tersedia dan diuji; finalisasi dokumentasi setup/batasan masih termasuk Milestone 6.
+- [x] Secret tidak masuk Git/log, dan Studio digunakan lokal.
 - [ ] Pengguna dapat menjelaskan alasan memilih masing-masing pattern serta cara data berpindah antar-stage.
 
 ## 8. Keputusan yang diselesaikan saat implementasi
