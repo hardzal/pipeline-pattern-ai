@@ -203,7 +203,7 @@ The case studies will be developed in this order:
 2. **Idea Review Board** — parallel execution and result aggregation.
 3. **Ticket Triage** — schema validation and deterministic routing.
 
-Each case study should first exercise its deterministic pipeline shape with Anvia steps. Real agents and a model provider can then be connected after the workflow behavior is covered by tests.
+Each case study should first exercise its deterministic pipeline shape with Anvia steps. Real agents and a model provider can then be connected after the workflow behavior is covered by tests. Once a pipeline works, it will also be registered in Anvia Studio as a visual demo before development moves to the next case study.
 
 ## Current Status
 

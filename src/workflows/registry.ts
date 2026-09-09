@@ -1,5 +1,6 @@
 import type { Pipeline } from "@anvia/core/pipeline";
 
+import { createCompletionModel } from "../agents/model.js";
 import type { AppConfig } from "../config.js";
 import { createArticleRefinerPipeline } from "./article-refiner.js";
 
@@ -15,14 +16,16 @@ export type WorkflowRegistry = Partial<Record<WorkflowName, WorkflowPipeline>>;
 export function createWorkflowRegistry(
   config: AppConfig,
 ): WorkflowRegistry {
-  if (config.mode !== "mock") {
-    throw new Error(
-      "Live workflow registry is not available until Milestone 3.",
-    );
+  if (config.mode === "mock") {
+    return {
+      "article-refiner": createArticleRefinerPipeline({ mode: "mock" }),
+    };
   }
 
+  const model = createCompletionModel(config);
+
   return {
-    "article-refiner": createArticleRefinerPipeline({ mode: "mock" }),
+    "article-refiner": createArticleRefinerPipeline({ mode: "live", model }),
   };
 }
 
