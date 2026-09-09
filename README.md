@@ -246,8 +246,8 @@ Status implementasi:
 1. **Article Refiner** — `[x]` sequential composition dan context passing.
 2. **Idea Review Board** — `[x]` parallel execution dan result aggregation.
 3. **Ticket Triage** — `[x]` schema validation dan deterministic routing.
-4. **Finalisasi M6** — `[~]` CLI, output file, timeout/retry policy, dan dokumentasi selesai; live network smoke test serta inspeksi browser penuh tetap opt-in/pending.
+4. **Finalisasi M6** — `[~]` CLI, output file, timeout/retry policy, dokumentasi, dan live CLI smoke test ketiga workflow selesai; verifikasi error provider serta inspeksi run live melalui Studio tetap opt-in/pending.
 
 
 
-Project saat ini memiliki tiga workflow yang dapat dijalankan dari CLI dan Studio dalam mode `mock`. Mode `live` sudah memiliki wiring provider OpenAI-compatible, tetapi pemanggilan provider nyata tetap opt-in dan belum menjadi bagian dari test otomatis.
+Project saat ini memiliki tiga workflow yang dapat dijalankan dari CLI dan Studio dalam mode `mock`. Mode `live` sudah memiliki wiring provider OpenAI-compatible dan telah diverifikasi melalui smoke test CLI dengan provider nyata; pemanggilan provider tetap opt-in dan bukan bagian dari test otomatis.

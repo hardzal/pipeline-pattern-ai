@@ -175,7 +175,7 @@ Pekerjaan:
 
 ### Milestone 3 — Article Refiner live dan Studio
 
-**Status:** [~] Implementasi live, shared registry, dan Studio selesai — commit `0038597`. Live network smoke test dengan credential nyata belum dijalankan.
+**Status:** [~] Implementasi live, shared registry, Studio, dan live CLI smoke test selesai — implementasi pada commit `0038597`. Inspeksi live melalui Studio dan verifikasi error provider nyata masih pending.
 
 **Tujuan belajar:** integrasi model, prompt per peran, dan inspeksi visual.
 
@@ -230,7 +230,7 @@ Pekerjaan:
 
 ### Milestone 6 — Finalisasi dan demo end-to-end
 
-**Status:** [~] CLI finalization, output file, timeout/retry policy, mock demos, dokumentasi, dan inspeksi Studio sudah diverifikasi. Live network smoke test masih pending karena memerlukan credential/provider nyata.
+**Status:** [~] CLI finalization, output file, timeout/retry policy, mock demos, dokumentasi, inspeksi Studio, dan live CLI smoke test sudah diverifikasi. Verifikasi error provider nyata dan inspeksi run live melalui Studio masih pending.
 
 **Tujuan belajar:** reliability, pengalaman pengguna, dan evaluasi.
 
@@ -352,7 +352,7 @@ Ekspektasi: typecheck lulus, tests deterministik lulus tanpa API key, build meng
 - [x] Ticket Triage memvalidasi extraction sebelum routing deterministik.
 - [x] Semua workflow dapat dijalankan dari CLI, terdaftar di Studio, dan graph Studio sudah diinspeksi; satu run mock Ticket Triage juga diverifikasi melalui browser.
 - [x] Mode mock jelas dibedakan dari hasil live.
-- [ ] Satu provider live terkonfigurasi dan ketiga workflow telah diuji dengan panggilan asli.
+- [x] Satu provider live terkonfigurasi dan ketiga workflow telah diuji dengan panggilan asli.
 - [~] Error input, schema, dan branch sudah diuji; error provider melalui panggilan live nyata belum diverifikasi.
 - [x] Test otomatis lulus tanpa kredensial atau network.
 - [x] Sample input, setup environment, command, dan batasan utama sudah terdokumentasi serta command mock sudah diuji.
