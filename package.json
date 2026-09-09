@@ -8,8 +8,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write ."
+    "studio": "tsx src/studio.ts"
   },
   "keywords": [],
   "author": "",
