@@ -3,6 +3,7 @@ import type { Pipeline } from "@anvia/core/pipeline";
 import { createCompletionModel } from "../agents/model.js";
 import type { AppConfig } from "../config.js";
 import { createArticleRefinerPipeline } from "./article-refiner.js";
+import { createIdeaReviewBoardPipeline } from "./idea-review-board.js";
 
 export type WorkflowName =
   | "article-refiner"
@@ -19,6 +20,7 @@ export function createWorkflowRegistry(
   if (config.mode === "mock") {
     return {
       "article-refiner": createArticleRefinerPipeline({ mode: "mock" }),
+      "idea-review-board": createIdeaReviewBoardPipeline({ mode: "mock" }),
     };
   }
 
@@ -26,6 +28,7 @@ export function createWorkflowRegistry(
 
   return {
     "article-refiner": createArticleRefinerPipeline({ mode: "live", model }),
+    "idea-review-board": createIdeaReviewBoardPipeline({ mode: "live", model }),
   };
 }
 

@@ -1,0 +1,5 @@
+Kita membangun aplikasi belajar coding adaptif untuk developer pemula.
+
+Aplikasi ini memberikan latihan singkat, menganalisis kesalahan pengguna, lalu menyesuaikan materi berikutnya berdasarkan konsep yang belum dikuasai. Model bisnis awalnya adalah langganan bulanan untuk individu dan lisensi untuk bootcamp.
+
+Tim awal terdiri dari dua engineer dan satu mentor edukasi. Hipotesis utama yang perlu diuji adalah apakah umpan balik adaptif membuat pengguna berlatih lebih konsisten dibandingkan platform latihan statis.
