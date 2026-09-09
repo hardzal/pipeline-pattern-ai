@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write ."
   },
@@ -23,7 +25,8 @@
   "devDependencies": {
     "@anvia/studio": "^1.1.2",
     "@types/node": "^26.5.0",
-    "tsx": "^4.23.13"
+    "tsx": "^4.23.13",
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@anvia/core": "^1.1.2",
