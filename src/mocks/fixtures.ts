@@ -8,6 +8,7 @@ import type {
   IdeaReviewRole,
   IdeaReviews,
 } from "../schemas/idea.js";
+import type { TicketExtraction } from "../schemas/ticket.js";
 
 export function createMockDraft(brief: ArticleBrief): string {
   return [
@@ -101,5 +102,35 @@ export function createMockIdeaReviewBoardResult({
       "Uji prototipe kecil untuk mengukur masalah dan willingness to pay.",
       "Catat asumsi teknis serta risiko implementasi utama.",
     ],
+  };
+}
+
+export function createMockTicketExtraction(text: string): TicketExtraction {
+  const customerMatch = text.match(/(?:customer|pelanggan)\s*:\s*([^\n]+)/i);
+  const subjectMatch = text.match(/(?:subject|subjek|judul)\s*:\s*([^\n]+)/i);
+  const priorityMatch = text.match(
+    /(?:priority|prioritas)\s*:\s*(low|normal|high)\b/i,
+  );
+  const normalized = text.toLowerCase();
+
+  let priority: TicketExtraction["priority"] = "normal";
+  if (
+    priorityMatch?.[1]?.toLowerCase() === "high" ||
+    /\b(urgent|critical|kritis|darurat|outage|blocked)\b/i.test(normalized)
+  ) {
+    priority = "high";
+  } else if (
+    priorityMatch?.[1]?.toLowerCase() === "low" ||
+    /\b(low|minor|ringan|saran|feedback)\b/i.test(normalized)
+  ) {
+    priority = "low";
+  } else if (priorityMatch?.[1]?.toLowerCase() === "normal") {
+    priority = "normal";
+  }
+
+  return {
+    customer: customerMatch?.[1]?.trim() ?? null,
+    summary: subjectMatch?.[1]?.trim() ?? text.trim().split("\n")[0] ?? "Ticket",
+    priority,
   };
 }

@@ -4,6 +4,7 @@ import { createCompletionModel } from "../agents/model.js";
 import type { AppConfig } from "../config.js";
 import { createArticleRefinerPipeline } from "./article-refiner.js";
 import { createIdeaReviewBoardPipeline } from "./idea-review-board.js";
+import { createTicketTriagePipeline } from "./ticket-triage.js";
 
 export type WorkflowName =
   | "article-refiner"
@@ -21,6 +22,7 @@ export function createWorkflowRegistry(
     return {
       "article-refiner": createArticleRefinerPipeline({ mode: "mock" }),
       "idea-review-board": createIdeaReviewBoardPipeline({ mode: "mock" }),
+      "ticket-triage": createTicketTriagePipeline({ mode: "mock" }),
     };
   }
 
@@ -29,6 +31,7 @@ export function createWorkflowRegistry(
   return {
     "article-refiner": createArticleRefinerPipeline({ mode: "live", model }),
     "idea-review-board": createIdeaReviewBoardPipeline({ mode: "live", model }),
+    "ticket-triage": createTicketTriagePipeline({ mode: "live", model }),
   };
 }
 

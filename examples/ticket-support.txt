@@ -1,0 +1,5 @@
+Customer: Rina Pratama
+Subject: Produksi tidak dapat login
+Priority: high
+
+Semua pengguna menerima error 500 saat mencoba login sejak deploy terakhir. Tim kami sudah mencoba rollback konfigurasi aplikasi, tetapi masalah masih terjadi dan menghambat operasi produksi.
