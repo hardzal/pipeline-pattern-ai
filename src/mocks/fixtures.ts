@@ -57,13 +57,13 @@ export function createMockRewrite({
     `Untuk ${brief.audience}, ${brief.topic.toLowerCase()} membantu proses belajar menjadi lebih terarah.`,
     "",
     "## Mengapa hal ini penting?",
-    `Konsep ini dapat dipahami melalui langkah sederhana dan contoh yang dekat dengan pekerjaan sehari-hari. ${draft.split("\\n").at(-1) ?? ""}`,
+    `Konsep ini dapat dipahami melalui langkah sederhana dan contoh yang dekat dengan pekerjaan sehari-hari. ${draft.split("\n").at(-1) ?? ""}`,
     "",
     "## Perbaikan diterapkan",
-    critique.improvements.map((improvement) => `- ${improvement}`).join("\\n"),
+    critique.improvements.map((improvement) => `- ${improvement}`).join("\n"),
     "",
     `Versi akhir menggunakan bahasa ${brief.language} dan mempertahankan fokus pada kebutuhan pembaca.`,
-  ].join("\\n");
+  ].join("\n");
 }
 
 export function createMockIdeaReview(

@@ -17,6 +17,8 @@ describe("Article Refiner mock pipeline", () => {
     expect(result.output.draft).toContain("Manfaat automated testing");
     expect(result.output.critique.improvements.length).toBeGreaterThan(0);
     expect(result.output.finalArticle).toContain("Perbaikan diterapkan");
+    expect(result.output.finalArticle).toContain("\n## Mengapa hal ini penting?");
+    expect(result.output.finalArticle).not.toContain("\\n");
     expect(result.output.finalArticle).not.toBe(result.output.draft);
   });
 

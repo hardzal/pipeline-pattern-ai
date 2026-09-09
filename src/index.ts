@@ -5,6 +5,8 @@ import { resolve } from "node:path";
 import { loadConfig, type AppMode } from "./config.js";
 import { readWorkflowInput } from "./cli/input.js";
 import { formatWorkflowOutput } from "./cli/output.js";
+import { writeWorkflowOutput } from "./cli/output-file.js";
+import { runWorkflowWithPolicy } from "./cli/runtime.js";
 import {
   createWorkflowRegistry,
   getWorkflow,
@@ -25,6 +27,8 @@ export type CliArgs = {
   mode: AppMode;
   file: string | undefined;
   json: boolean;
+  output: string | undefined;
+  timeoutMs: number | undefined;
   help: boolean;
 };
 
@@ -50,6 +54,8 @@ Options:
   --mode mock|live    Select the execution mode (default: mock)
   --file <path>      Read workflow input from a file
   --json              Print the result as JSON
+  --output <path>    Write the formatted result to a new file
+  --timeout <ms>     Abort a run that exceeds this timeout (default: 60000)
   -h, --help         Show this help message
 
 Examples:
@@ -85,6 +91,8 @@ export function parseCliArgs(argv: string[]): CliArgs {
   let mode: AppMode = "mock";
   let file: string | undefined;
   let json = false;
+  let output: string | undefined;
+  let timeoutMs: number | undefined;
   let help = false;
 
   for (let index = 0; index < normalizedArgv.length; index += 1) {
@@ -136,6 +144,39 @@ export function parseCliArgs(argv: string[]): CliArgs {
       continue;
     }
 
+    if (argument === "--output" || argument.startsWith("--output=")) {
+      const value = argument.startsWith("--output=")
+        ? argument.slice("--output=".length)
+        : requireOptionValue(normalizedArgv, "--output", index);
+
+      if (argument === "--output") {
+        index += 1;
+      }
+
+      output = value;
+      continue;
+    }
+
+    if (argument === "--timeout" || argument.startsWith("--timeout=")) {
+      const rawValue = argument.startsWith("--timeout=")
+        ? argument.slice("--timeout=".length)
+        : requireOptionValue(normalizedArgv, "--timeout", index);
+
+      if (argument === "--timeout") {
+        index += 1;
+      }
+
+      const parsedValue = Number(rawValue);
+      if (!Number.isInteger(parsedValue) || parsedValue <= 0) {
+        throw new CliUsageError(
+          `Invalid timeout: ${rawValue}. Expected a positive integer in milliseconds`,
+        );
+      }
+
+      timeoutMs = parsedValue;
+      continue;
+    }
+
     if (argument.startsWith("-")) {
       throw new CliUsageError(`Unknown option: ${argument}`);
     }
@@ -151,7 +192,7 @@ export function parseCliArgs(argv: string[]): CliArgs {
     command = argument;
   }
 
-  return { command, mode, file, json, help };
+  return { command, mode, file, json, output, timeoutMs, help };
 }
 
 export function validateCliArgs(args: CliArgs): void {
@@ -188,15 +229,22 @@ export async function main(
     const registry = createWorkflowRegistry(config);
     const workflow = getWorkflow(registry, args.command);
     const input = await readWorkflowInput(args.command, args.file);
-    const result = await workflow.run({ input });
-
-    console.log(
-      formatWorkflowOutput(result.output, {
-        json: args.json,
-        mode: config.mode,
-        runId: result.runId,
-      }),
+    const result = await runWorkflowWithPolicy(
+      workflow,
+      input,
+      args.timeoutMs === undefined ? {} : { timeoutMs: args.timeoutMs },
     );
+    const formattedOutput = formatWorkflowOutput(result.output, {
+      json: args.json,
+      mode: config.mode,
+      runId: result.runId,
+    });
+
+    if (args.output !== undefined) {
+      await writeWorkflowOutput(args.output, `${formattedOutput}\n`);
+    }
+
+    console.log(formattedOutput);
 
     return 0;
   } catch (error: unknown) {

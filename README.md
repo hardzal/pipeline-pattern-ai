@@ -171,40 +171,83 @@ Studio is a development and demonstration surface. The CLI remains the primary a
 pnpm install
 ```
 
-The Anvia packages will be added during the first implementation milestone. The base installation will use:
+Mode `mock` tidak membutuhkan API key. Untuk mode `live`, salin `.env-example` menjadi `.env` lalu isi:
 
-```bash
-pnpm add @anvia/core @anvia/studio zod
+```dotenv
+OPENAI_API_KEY=your-key
+OPENAI_API_BASE_URL=https://your-openai-compatible-endpoint/v1
+LLM_MODEL=your-model-name
 ```
 
-The chosen model provider requires one matching adapter, for example:
+Jangan commit `.env` atau memasukkan credential ke source code maupun output.
+
+### CLI help dan mock demos
 
 ```bash
-pnpm add @anvia/openai
+pnpm dev --help
+
+pnpm dev article-refiner --mode mock --file examples/article-brief.json
+pnpm dev idea-review-board --mode mock --file examples/startup-pitch.txt
+pnpm dev ticket-triage --mode mock --file examples/ticket-support.txt --json
 ```
 
-### Run the project
+Semua mock workflow deterministik dan tidak memanggil provider. Output JSON hanya berisi hasil workflow sehingga aman dipipe atau diproses program lain.
+
+### Live mode
 
 ```bash
-pnpm dev
+pnpm dev article-refiner --mode live --file examples/article-brief.json
+pnpm dev idea-review-board --mode live --file examples/startup-pitch.txt
+pnpm dev ticket-triage --mode live --file examples/ticket-support.txt --json
 ```
 
-### Build
+Live mode memerlukan ketiga variable environment di atas. Provider call bersifat opt-in dan dapat menimbulkan biaya.
+
+### Menyimpan hasil
 
 ```bash
+pnpm dev article-refiner \
+  --mode mock \
+  --file examples/article-brief.json \
+  --json \
+  --output outputs/article-result.json
+```
+
+`--output` membuat file baru dan menolak overwrite file yang sudah ada. Hapus atau pindahkan file lama sebelum menjalankan command yang sama kembali. `--timeout <ms>` dapat digunakan untuk membatasi durasi satu run; error transient tertentu mendapat maksimal satu retry tambahan.
+
+### Build dan tests
+
+```bash
+pnpm typecheck
+pnpm test
 pnpm build
 ```
 
+Build menghasilkan artifact di `dist/`. Test otomatis tidak membutuhkan internet atau credential.
+
+### Anvia Studio
+
+```bash
+pnpm studio --mode mock
+```
+
+Buka `http://127.0.0.1:4021/playground`. Studio mendaftarkan ketiga pipeline dari registry yang sama dengan CLI. Gunakan mode `live` hanya setelah konfigurasi provider tersedia:
+
+```bash
+pnpm studio --mode live
+```
+
+Studio dibind ke loopback untuk penggunaan lokal. Jangan mengeksposnya ke jaringan publik tanpa kontrol akses.
+
 ## Implementation Roadmap
 
-The case studies will be developed in this order:
+Status implementasi:
 
-1. **Article Refiner** — sequential composition and context passing.
-2. **Idea Review Board** — parallel execution and result aggregation.
-3. **Ticket Triage** — schema validation and deterministic routing.
+1. **Article Refiner** — `[x]` sequential composition dan context passing.
+2. **Idea Review Board** — `[x]` parallel execution dan result aggregation.
+3. **Ticket Triage** — `[x]` schema validation dan deterministic routing.
+4. **Finalisasi M6** — `[~]` CLI, output file, timeout/retry policy, dan dokumentasi selesai; live network smoke test serta inspeksi browser penuh tetap opt-in/pending.
 
-Each case study should first exercise its deterministic pipeline shape with Anvia steps. Real agents and a model provider can then be connected after the workflow behavior is covered by tests. Once a pipeline works, it will also be registered in Anvia Studio as a visual demo before development moves to the next case study.
 
-## Current Status
 
-The repository currently contains the initial TypeScript project setup and the definitions of the three planned case studies. Implementation begins with **Article Refiner**.
+Project saat ini memiliki tiga workflow yang dapat dijalankan dari CLI dan Studio dalam mode `mock`. Mode `live` sudah memiliki wiring provider OpenAI-compatible, tetapi pemanggilan provider nyata tetap opt-in dan belum menjadi bagian dari test otomatis.

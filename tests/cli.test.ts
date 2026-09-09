@@ -22,6 +22,8 @@ describe("CLI arguments", () => {
       mode: "mock",
       file: "examples/article-brief.json",
       json: true,
+      output: undefined,
+      timeoutMs: undefined,
       help: false,
     });
   });
@@ -32,7 +34,31 @@ describe("CLI arguments", () => {
       mode: "mock",
       file: undefined,
       json: false,
+      output: undefined,
+      timeoutMs: undefined,
       help: true,
+    });
+  });
+
+  it("parses an output path and a positive timeout", () => {
+    expect(
+      parseCliArgs([
+        "ticket-triage",
+        "--file",
+        "examples/support-ticket.txt",
+        "--output",
+        "outputs/ticket.json",
+        "--timeout",
+        "2500",
+      ]),
+    ).toEqual({
+      command: "ticket-triage",
+      mode: "mock",
+      file: "examples/support-ticket.txt",
+      json: false,
+      output: "outputs/ticket.json",
+      timeoutMs: 2500,
+      help: false,
     });
   });
 
@@ -61,5 +87,7 @@ describe("CLI arguments", () => {
     expect(help).toContain("idea-review-board");
     expect(help).toContain("ticket-triage");
     expect(help).toContain("--mode mock|live");
+    expect(help).toContain("--output <path>");
+    expect(help).toContain("--timeout <ms>");
   });
 });

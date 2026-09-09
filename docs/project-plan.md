@@ -15,7 +15,7 @@
 
 Sumber kebutuhan: [diagram studi kasus](details-submission.png) dan [README](../README.md).
 
-Semua milestone, struktur file, command baru, kontrak output, serta contoh penggunaan di bawah adalah **target implementasi**, bukan fitur yang sudah tersedia. Saat rencana ini dibuat, README menjelaskan fondasi TypeScript dan tiga workflow yang masih direncanakan.
+Dokumen ini memuat target awal sekaligus status implementasi aktual. Milestone 1–5 sudah tersedia; status Milestone 6 dan batasan live provider dicatat eksplisit di bawah.
 
 ### Termasuk dalam MVP
 
@@ -230,7 +230,7 @@ Pekerjaan:
 
 ### Milestone 6 — Finalisasi dan demo end-to-end
 
-**Status:** [ ] Belum dikerjakan.
+**Status:** [~] CLI finalization, output file, timeout/retry policy, mock demos, dokumentasi, dan inspeksi Studio sudah diverifikasi. Live network smoke test masih pending karena memerlukan credential/provider nyata.
 
 **Tujuan belajar:** reliability, pengalaman pengguna, dan evaluasi.
 
@@ -259,7 +259,7 @@ Untuk setiap milestone: pahami input/output → tulis test yang gagal → implem
 
 ## 6. Target penggunaan akhir
 
-> Command berikut merupakan kontrak CLI yang direncanakan. Belum dianggap tersedia sampai milestone terkait selesai dan diverifikasi. Semua contoh output yang disebut di dokumen ini adalah ekspektasi, bukan hasil eksekusi aktual.
+> Command berikut adalah kontrak CLI yang tersedia untuk workflow yang sudah selesai dan diverifikasi. Contoh output tetap bersifat ilustratif; hasil aktual bergantung pada input dan mode eksekusi.
 
 ### Setup
 
@@ -268,7 +268,7 @@ pnpm install
 pnpm dev --help
 ```
 
-Untuk mode live, salin `.env.example` ke `.env`, isi provider/model/key sesuai adapter yang dipilih, dan pastikan aplikasi memuat file tersebut. Nama variabel kredensial final mengikuti provider; tidak diasumsikan OpenAI sebelum dipilih.
+Untuk mode live, salin `.env-example` ke `.env`, lalu isi `OPENAI_API_KEY`, `OPENAI_API_BASE_URL`, dan `LLM_MODEL`. Jangan commit `.env` atau credential.
 
 ### Article Refiner
 
@@ -322,7 +322,7 @@ pnpm studio --mode mock
 pnpm studio --mode live
 ```
 
-Target alamat lokal: `http://localhost:4021`, dengan bind hanya pada loopback. Opsi bind mengikuti API versi Studio yang dipasang dan perlu diverifikasi saat implementasi.
+Target alamat lokal: `http://127.0.0.1:4021/playground`, dengan bind hanya pada loopback. Studio dan registry sudah diverifikasi pada versi API yang dipasang.
 
 1. Pilih workflow dari daftar pipeline.
 2. Masukkan brief JSON untuk Article Refiner atau teks untuk dua workflow lainnya, sesuai input schema.
@@ -350,12 +350,12 @@ Ekspektasi: typecheck lulus, tests deterministik lulus tanpa API key, build meng
 - [x] Article Refiner mempertahankan draft dan feedback sampai rewrite.
 - [x] Idea Review Board memiliki tiga cabang paralel dan merge yang lengkap.
 - [x] Ticket Triage memvalidasi extraction sebelum routing deterministik.
-- [~] Semua workflow dapat dijalankan dari CLI dan sudah terdaftar di Studio; inspeksi visual graph dan demo browser lengkap masih pending.
+- [x] Semua workflow dapat dijalankan dari CLI, terdaftar di Studio, dan graph Studio sudah diinspeksi; satu run mock Ticket Triage juga diverifikasi melalui browser.
 - [x] Mode mock jelas dibedakan dari hasil live.
 - [ ] Satu provider live terkonfigurasi dan ketiga workflow telah diuji dengan panggilan asli.
 - [~] Error input, schema, dan branch sudah diuji; error provider melalui panggilan live nyata belum diverifikasi.
 - [x] Test otomatis lulus tanpa kredensial atau network.
-- [~] Sample input dan command workflow sudah tersedia dan diuji; finalisasi dokumentasi setup/batasan masih termasuk Milestone 6.
+- [x] Sample input, setup environment, command, dan batasan utama sudah terdokumentasi serta command mock sudah diuji.
 - [x] Secret tidak masuk Git/log, dan Studio digunakan lokal.
 - [ ] Pengguna dapat menjelaskan alasan memilih masing-masing pattern serta cara data berpindah antar-stage.
 
