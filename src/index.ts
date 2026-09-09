@@ -3,6 +3,12 @@ import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
 import { loadConfig, type AppMode } from "./config.js";
+import { readWorkflowInput } from "./cli/input.js";
+import { formatWorkflowOutput } from "./cli/output.js";
+import {
+  createWorkflowRegistry,
+  getWorkflow,
+} from "./workflows/registry.js";
 
 export type { AppMode } from "./config.js";
 
@@ -163,7 +169,9 @@ function isMainModule(): boolean {
   );
 }
 
-export function main(argv: string[] = process.argv.slice(2)): number {
+export async function main(
+  argv: string[] = process.argv.slice(2),
+): Promise<number> {
   try {
     const args = parseCliArgs(argv);
 
@@ -177,27 +185,18 @@ export function main(argv: string[] = process.argv.slice(2)): number {
 
     const config = loadConfig(args.mode);
 
-    const status = {
-      status: "ready",
-      command: args.command,
-      mode: config.mode,
-      file: args.file ?? null,
-      json: args.json,
-      message:
-        "CLI configuration is valid. This workflow will be implemented in a later milestone.",
-    };
+    const registry = createWorkflowRegistry(config);
+    const workflow = getWorkflow(registry, args.command);
+    const input = await readWorkflowInput(args.command, args.file);
+    const result = await workflow.run({ input });
 
-    if (args.json) {
-      console.log(JSON.stringify(status, null, 2));
-    } else {
-      console.log("AI Pattern CLI");
-      console.log(`Command: ${status.command}`);
-      console.log(`Mode: ${status.mode}`);
-      if (status.file !== null) {
-        console.log(`Input file: ${status.file}`);
-      }
-      console.log(status.message);
-    }
+    console.log(
+      formatWorkflowOutput(result.output, {
+        json: args.json,
+        mode: config.mode,
+        runId: result.runId,
+      }),
+    );
 
     return 0;
   } catch (error: unknown) {
@@ -209,5 +208,7 @@ export function main(argv: string[] = process.argv.slice(2)): number {
 }
 
 if (isMainModule()) {
-  process.exitCode = main();
+  void main().then((exitCode) => {
+    process.exitCode = exitCode;
+  });
 }
