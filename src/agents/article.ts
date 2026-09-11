@@ -12,6 +12,11 @@ export type ArticleAgents = {
   rewrite: Agent<string, OpenAICompletionModel>;
 };
 
+export type ArticleAgentGenerationOptions = {
+  abortSignal?: AbortSignal | undefined;
+  onTextDelta?: ((delta: string) => void) | undefined;
+};
+
 export function createArticleAgents(
   model: OpenAICompletionModel,
 ): ArticleAgents {
@@ -47,8 +52,20 @@ export function createArticleAgents(
 export async function generateArticleAgentOutput<Output>(
   agent: Agent<Output, OpenAICompletionModel>,
   prompt: string,
+  options: ArticleAgentGenerationOptions = {},
 ): Promise<Output> {
-  const result = await agent.generate({ prompt });
+  const stream = agent.stream({
+    prompt,
+    abortSignal: options.abortSignal,
+  });
+
+  for await (const event of stream.events) {
+    if (event.type === "text_delta") {
+      options.onTextDelta?.(event.delta);
+    }
+  }
+
+  const result = await stream.result;
 
   if (result.type !== "response") {
     throw new Error(`Agent ${agent.id} did not return a response.`);

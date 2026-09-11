@@ -15,7 +15,7 @@ export type WorkflowExecutionPolicy = {
   maxAttempts?: number;
 };
 
-export const DEFAULT_WORKFLOW_TIMEOUT_MS = 60_000;
+export const DEFAULT_WORKFLOW_TIMEOUT_MS = 180_000;
 export const DEFAULT_WORKFLOW_MAX_ATTEMPTS = 2;
 
 export class WorkflowTimeoutError extends Error {

@@ -11,6 +11,7 @@ import {
   createWorkflowRegistry,
   getWorkflow,
 } from "./workflows/registry.js";
+import type { ArticleRefinerProgressEvent } from "./workflows/article-refiner.js";
 
 export type { AppMode } from "./config.js";
 
@@ -55,7 +56,7 @@ Options:
   --file <path>      Read workflow input from a file
   --json              Print the result as JSON
   --output <path>    Write the formatted result to a new file
-  --timeout <ms>     Abort a run that exceeds this timeout (default: 60000)
+  --timeout <ms>     Abort a run that exceeds this timeout (default: 180000)
   -h, --help         Show this help message
 
 Examples:
@@ -210,6 +211,20 @@ function isMainModule(): boolean {
   );
 }
 
+function writeArticleProgress(event: ArticleRefinerProgressEvent): void {
+  if (event.type === "stage_started") {
+    console.error(`[article-refiner] ${event.stage}: streaming`);
+    return;
+  }
+
+  if (event.type === "text_delta") {
+    process.stderr.write(event.delta);
+    return;
+  }
+
+  console.error(`\n[article-refiner] ${event.stage}: complete`);
+}
+
 export async function main(
   argv: string[] = process.argv.slice(2),
 ): Promise<number> {
@@ -226,13 +241,16 @@ export async function main(
 
     const config = loadConfig(args.mode);
 
-    const registry = createWorkflowRegistry(config);
+    const registry = createWorkflowRegistry(config, {
+      onArticleProgress:
+        config.mode === "live" ? writeArticleProgress : undefined,
+    });
     const workflow = getWorkflow(registry, args.command);
     const input = await readWorkflowInput(args.command, args.file);
     const result = await runWorkflowWithPolicy(
       workflow,
       input,
-      args.timeoutMs === undefined ? {} : { timeoutMs: args.timeoutMs },
+      { timeoutMs: args.timeoutMs ?? workflow.timeoutMs },
     );
     const formattedOutput = formatWorkflowOutput(result.output, {
       json: args.json,
@@ -242,6 +260,8 @@ export async function main(
 
     if (args.output !== undefined) {
       await writeWorkflowOutput(args.output, `${formattedOutput}\n`);
+      console.log(`Output written to ${args.output}`);
+      return 0;
     }
 
     console.log(formattedOutput);

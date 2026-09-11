@@ -213,7 +213,7 @@ pnpm dev article-refiner \
   --output outputs/article-result.json
 ```
 
-`--output` membuat file baru dan menolak overwrite file yang sudah ada. Hapus atau pindahkan file lama sebelum menjalankan command yang sama kembali. `--timeout <ms>` dapat digunakan untuk membatasi durasi satu run; error transient tertentu mendapat maksimal satu retry tambahan.
+`--output` membuat file baru dan menolak overwrite file yang sudah ada, lalu hanya mencetak lokasi file ke stdout. Hapus atau pindahkan file lama sebelum menjalankan command yang sama kembali. Setiap pipeline memiliki timeout 180 detik; `--timeout <ms>` dapat digunakan untuk override durasi satu run. Error transient tertentu mendapat maksimal satu retry tambahan. Article Refiner live menampilkan token hasil streaming pada stderr, sehingga output JSON di stdout tetap valid.
 
 ### Build dan tests
 
